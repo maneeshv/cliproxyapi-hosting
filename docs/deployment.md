@@ -8,7 +8,8 @@
 | Workspace | `75ca093d-3a79-410b-979e-00c31c698666` |
 | Environment | `production` / `1c70fd00-9321-4e78-84b9-f4962873206a` |
 | Region | Singapore / `asia-southeast1-eqsg3a` |
-| Public API base | `https://gateway-production-9f79.up.railway.app/v1` |
+| OpenAI API base | `https://gateway-production-9f79.up.railway.app/v1` |
+| Claude Code base | `https://gateway-production-9f79.up.railway.app` (no `/v1`) |
 | Gateway service | `423d8b1a-4fb3-44f2-8bfa-0ce735e17ce1` |
 | Core service | `99fd589b-ef3a-4963-88c9-439435752e50` |
 | Admin service | `839cc6e0-b016-4583-8cfb-caf479fc72aa` |
@@ -67,6 +68,19 @@
   must use the full HTTPS hostname; there is no HTTP redirect on port 8317.
 
 ## Remaining setup and limitations
+
+### Remote Claude Code diagnosis — 2026-09-07
+
+The remote client reported that `claude-sonnet-5` may not exist or be accessible.
+`scripts/test_endpoint_tmp.py` tested that exact model from the setup machine
+against public HTTPS using `.secrets/PROXY_API_KEY`: missing key 401; Bearer
+and x-api-key model listing 200; selected model advertised; token counting 200;
+Messages 200 with response model `claude-sonnet-5`; streaming 200 ending in
+`message_stop` without error events. All checks passed. No gateway change was
+made. The remote machine's base URL, effective credentials and client settings
+have not been verified; this local result does not establish the remote cause.
+
+### Other limitations
 
 - **Machine tag verified.** After the user assigned it in Tailscale,
   `scripts/check_private.py` confirms `tag:cliproxy-admin` on the same node ID,

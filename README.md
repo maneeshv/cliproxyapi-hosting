@@ -129,6 +129,28 @@ provider rotates tokens. Reauthentication is the recovery path for rejected or
 expired credentials. An authenticated model list does not prove inference;
 verify a small real completion and streaming response after enrollment.
 
+## Claude Code endpoint diagnosis
+
+Copy `scripts/test_endpoint_tmp.py` to the remote machine (Python 3.9+, no
+packages), then run:
+
+```sh
+python3 test_endpoint_tmp.py --base-url https://gateway-production-9f79.up.railway.app --model claude-sonnet-5
+```
+
+The script reads `PROXY_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, or `ANTHROPIC_API_KEY`
+in that order, otherwise prompts without echo. Use `--key-file /path/to/key`
+to override existing credentials. Never pass the key itself as an argument.
+It verifies TLS, unauthenticated rejection, both supported authentication
+headers, model listing, token counting, a tiny completion and complete SSE
+stream. Inference consumes subscription usage. Exit 0 means all checks passed.
+
+For Claude Code, set `ANTHROPIC_BASE_URL` to the origin above **without `/v1`**,
+and `ANTHROPIC_AUTH_TOKEN` to the public proxy key. Clear a conflicting
+`ANTHROPIC_API_KEY`, select `claude-sonnet-5`, and inspect `/status` for the
+effective endpoint and credential source. Settings-file environment values can
+override shell exports. See the [Claude Code gateway guide](https://code.claude.com/docs/en/llm-gateway-connect).
+
 ## Persistence, backups and recovery
 
 The core seeds `/data/config.yaml` once and preserves later dashboard edits.
