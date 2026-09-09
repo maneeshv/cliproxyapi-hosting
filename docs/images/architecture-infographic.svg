@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1430" viewBox="0 0 2200 1430" role="img" aria-labelledby="title desc">
+<title id="title">CLIProxyAPI on Railway — public inference and private management</title>
+<desc id="desc">API clients enter through Railway HTTPS ingress and gateway Caddy port 8080. Gateway sends an upstream API key over private HTTP port 8317 to core. Administrators reach admin Tailscale Forwarder over tailnet HTTPS port 8317; it forwards private HTTP to core. Core and admin each mount a separate persistent data volume. Provider APIs are outside Railway. Diagram reflects repository configuration, not live verification.</desc>
+<defs>
+<marker id="public" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#247595"/></marker>
+<marker id="private" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#708295"/></marker>
+<marker id="vpn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#7b5bab"/></marker>
+<marker id="blocked" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#ba505b"/></marker>
+</defs>
+<rect x="0" y="0" width="2200" height="1430" rx="0" fill="#f8fafc" stroke="#f8fafc" stroke-width="1.5" />
+<text x="60" y="73" font-family="Inter, Helvetica, Arial, sans-serif" font-size="44" fill="#1b3048" font-weight="700" >CLIProxyAPI on Railway</text>
+<text x="60" y="114" font-family="Inter, Helvetica, Arial, sans-serif" font-size="23" fill="#63758a" font-weight="400" >Public inference · Private management · Persistent credentials</text>
+<rect x="1830" y="52" width="310" height="30" rx="8" fill="#e9eef4" stroke="#e9eef4" stroke-width="1.5" />
+<text x="1842" y="73" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#536982" font-weight="700" >SOURCE-DEFINED SETUP</text>
+<rect x="395" y="165" width="1410" height="845" rx="24" fill="#f0f5fa" stroke="#b8c9da" stroke-width="1.5" />
+<text x="425" y="196" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">RAILWAY PROJECT / ENVIRONMENT</text>
+<text x="1160" y="196" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#60758c" font-weight="400" >Singapore · 1 replica per service</text>
+<rect x="425" y="300" width="1350" height="680" rx="20" fill="#fdfefe" stroke="#c3d4dc" stroke-width="1.5" stroke-dasharray="8 7"/>
+<text x="453" y="331" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">PRIVATE NETWORK</text>
+<rect x="485" y="217" width="320" height="70" rx="13" fill="#eaf5fa" stroke="#a3c7d8" stroke-width="1.5" />
+<text x="505" y="246" font-family="Inter, Helvetica, Arial, sans-serif" font-size="23" fill="#234c65" font-weight="700" >Railway HTTPS ingress</text>
+<text x="505" y="271" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#4d6d80" font-weight="400" >Public domain to gateway:8080</text>
+<path d="M 305 467 H 352 V 252 H 485" fill="none" stroke="#247595" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#public)"/>
+<text x="72" y="263" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#247595" font-weight="700" >Public HTTPS</text>
+<text x="72" y="294" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#577085" font-weight="400" >PROXY_API_KEY</text>
+<text x="72" y="321" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#577085" font-weight="400" >Bearer or X-Api-Key</text>
+<path d="M 645 287 V 400" fill="none" stroke="#708295" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#private)"/>
+<text x="660" y="373" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#63768a" font-weight="400" >HTTP :8080</text>
+<path d="M 805 511 H 1080" fill="none" stroke="#708295" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#private)"/>
+<text x="844" y="461" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#526a7f" font-weight="700" >Private HTTP :8317</text>
+<text x="844" y="488" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#526a7f" font-weight="400" >UPSTREAM_API_KEY</text>
+<path d="M 1240 400 V 358 H 1990 V 430" fill="none" stroke="#247595" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#public)"/>
+<text x="1490" y="348" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#247595" font-weight="400" >Outbound provider requests</text>
+<path d="M 1390 510 H 1480" fill="none" stroke="#708295" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#private)"/>
+<text x="1404" y="490" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#63768a" font-weight="400" >mount</text>
+<path d="M 305 823 H 485" fill="none" stroke="#7b5bab" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#vpn)"/>
+<path d="M 307 823 H 463" fill="none" stroke="#7b5bab" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 307 823 H 463" stroke="#f8fafc" stroke-width="2" fill="none"/>
+<text x="65" y="715" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#735199" font-weight="700" >Tailnet HTTPS :8317</text>
+<text x="65" y="745" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#735199" font-weight="400" >Access governed by tailnet policy</text>
+<path d="M 805 832 H 956 V 603 H 1080" fill="none" stroke="#708295" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#private)"/>
+<text x="978" y="702" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#526a7f" font-weight="400" >Private HTTP :8317</text>
+<text x="978" y="730" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#526a7f" font-weight="400" >MANAGEMENT_PASSWORD</text>
+<text x="978" y="758" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#526a7f" font-weight="400" >checked by core</text>
+<path d="M 645 922 V 958 H 1610 V 922" fill="none" stroke="#708295" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#private)"/>
+<text x="1070" y="945" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#63768a" font-weight="400" >Persistent mount /data</text>
+<rect x="60" y="401" width="245" height="145" rx="18" fill="#fff" stroke="#c6d6df" stroke-width="1.5" />
+<text x="83" y="431" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">INFERENCE CLIENTS</text>
+<text x="83" y="469" font-family="Inter, Helvetica, Arial, sans-serif" font-size="29" fill="#203a51" font-weight="700" >API clients</text>
+<text x="83" y="503" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >OpenAI / Anthropic</text>
+<text x="83" y="530" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >compatible tools</text>
+<rect x="60" y="778" width="245" height="145" rx="18" fill="#fff" stroke="#d3c8e0" stroke-width="1.5" />
+<text x="83" y="809" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">ADMINISTRATION</text>
+<text x="83" y="850" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" fill="#3a3152" font-weight="700" >Administrator</text>
+<text x="83" y="885" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#665777" font-weight="400" >Connected Tailscale device</text>
+<rect x="485" y="400" width="320" height="220" rx="18" fill="#fff" stroke="#a8c8d9" stroke-width="1.5" />
+<rect x="509" y="422" width="190" height="30" rx="8" fill="#e9f4f7" stroke="#e9f4f7" stroke-width="1.5" />
+<text x="521" y="443" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#247595" font-weight="700" >PUBLIC INFERENCE</text>
+<text x="509" y="486" font-family="Inter, Helvetica, Arial, sans-serif" font-size="34" fill="#213d55" font-weight="700" >gateway</text>
+<text x="509" y="518" font-family="Inter, Helvetica, Arial, sans-serif" font-size="23" fill="#43546a" font-weight="400" >Caddy · listener :8080</text>
+<text x="509" y="552" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >Allowlisted methods + paths</text>
+<text x="509" y="578" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >Separate client-key check</text>
+<text x="509" y="604" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >32 MiB request-body limit</text>
+<rect x="1080" y="400" width="310" height="240" rx="18" fill="#fff" stroke="#b8cdd7" stroke-width="1.5" />
+<rect x="1104" y="422" width="174" height="30" rx="8" fill="#edf3f6" stroke="#edf3f6" stroke-width="1.5" />
+<text x="1116" y="443" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#547185" font-weight="700" >PRIVATE SERVICE</text>
+<text x="1104" y="486" font-family="Inter, Helvetica, Arial, sans-serif" font-size="34" fill="#213d55" font-weight="700" >core</text>
+<text x="1104" y="520" font-family="Inter, Helvetica, Arial, sans-serif" font-size="23" fill="#43546a" font-weight="400" >CLIProxyAPI · :8317</text>
+<text x="1104" y="557" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#43546a" font-weight="400" >Inference + management</text>
+<text x="1104" y="585" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#43546a" font-weight="400" >/management.html</text>
+<text x="1104" y="613" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#43546a" font-weight="400" >Provider credentials</text>
+<rect x="1480" y="407" width="265" height="174" rx="18" fill="#eef5f5" stroke="#b7cece" stroke-width="1.5" />
+<text x="1503" y="440" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">PERSISTENT VOLUME</text>
+<text x="1503" y="481" font-family="Inter, Helvetica, Arial, sans-serif" font-size="28" fill="#2d5057" font-weight="700" >proxy-data</text>
+<text x="1503" y="516" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >1 GiB · mounted /data</text>
+<text x="1503" y="550" font-family="Menlo, Consolas, monospace" font-size="20" fill="#3c6570" font-weight="400" >config.yaml + auths/</text>
+<rect x="1870" y="430" width="270" height="185" rx="18" fill="#fff" stroke="#c6d6df" stroke-width="1.5" />
+<text x="1893" y="465" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">EXTERNAL APIS</text>
+<text x="1893" y="505" font-family="Inter, Helvetica, Arial, sans-serif" font-size="28" fill="#203a51" font-weight="700" >Provider APIs</text>
+<text x="1893" y="543" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#43546a" font-weight="400" >Your enrolled accounts</text>
+<text x="1893" y="571" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#43546a" font-weight="400" >Outside Railway / tailnet</text>
+<rect x="485" y="770" width="320" height="152" rx="18" fill="#f6f2fb" stroke="#cbb9dc" stroke-width="1.5" />
+<rect x="509" y="791" width="184" height="30" rx="8" fill="#eee5f7" stroke="#eee5f7" stroke-width="1.5" />
+<text x="521" y="812" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#735199" font-weight="700" >TAILNET ENDPOINT</text>
+<text x="509" y="857" font-family="Inter, Helvetica, Arial, sans-serif" font-size="32" fill="#45325f" font-weight="700" >admin</text>
+<text x="509" y="889" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#65527b" font-weight="400" >Tailscale Forwarder · :8317</text>
+<text x="509" y="748" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#735199" font-weight="400" >TLS terminates at this service</text>
+<rect x="1480" y="770" width="265" height="152" rx="18" fill="#eef5f5" stroke="#b7cece" stroke-width="1.5" />
+<text x="1503" y="805" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">PERSISTENT VOLUME</text>
+<text x="1503" y="844" font-family="Inter, Helvetica, Arial, sans-serif" font-size="26" fill="#2d5057" font-weight="700" >tailscale-state</text>
+<text x="1503" y="877" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#43546a" font-weight="400" >512 MiB · mounted /data</text>
+<text x="1503" y="904" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#58727c" font-weight="400" >Persistent tailnet identity</text>
+<path d="M 645 620 V 660" fill="none" stroke="#ba505b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 6" />
+<circle cx="645" cy="644" r="10" fill="#fff" stroke="#ba505b" stroke-width="2"/><path d="M 638 637 L 652 651" stroke="#ba505b" stroke-width="2"/>
+<rect x="485" y="662" width="320" height="63" rx="12" fill="#fff3f3" stroke="#e5bfc3" stroke-width="1.5" />
+<text x="501" y="687" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#9a3f4b" font-weight="700" >Other methods / paths: 404</text>
+<text x="501" y="710" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#9a3f4b" font-weight="400" >Includes public management + callbacks</text>
+<path d="M 64 1038 H 125" fill="none" stroke="#247595" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#public)"/>
+<text x="141" y="1045" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >Public / outbound</text>
+<path d="M 401 1038 H 462" fill="none" stroke="#708295" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#private)"/>
+<text x="478" y="1045" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >Private / internal</text>
+<path d="M 737 1038 H 798" fill="none" stroke="#7b5bab" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#vpn)"/>
+<path d="M 739 1038 H 778" stroke="#f8fafc" stroke-width="2" fill="none"/>
+<text x="814" y="1045" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >Tailnet secure access</text>
+<path d="M 1101 1038 H 1162" fill="none" stroke="#ba505b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 6" />
+<text x="1178" y="1045" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#43546a" font-weight="400" >Rejected by gateway</text>
+<text x="1675" y="1045" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#6b7b8d" font-weight="400" >Arrows show request direction</text>
+<rect x="60" y="1082" width="1220" height="251" rx="18" fill="#fff" stroke="#d5dfe8" stroke-width="1.5" />
+<text x="85" y="1119" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">PUBLIC GATEWAY ALLOWLIST</text>
+<text x="85" y="1159" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#247595" font-weight="700" >GET</text>
+<text x="180" y="1159" font-family="Menlo, Consolas, monospace" font-size="19" fill="#43546a" font-weight="400" >/v1/models   /v1/responses</text>
+<text x="85" y="1200" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#247595" font-weight="700" >POST</text>
+<text x="180" y="1200" font-family="Menlo, Consolas, monospace" font-size="19" fill="#43546a" font-weight="400" >/v1/chat/completions   /v1/completions</text>
+<text x="180" y="1231" font-family="Menlo, Consolas, monospace" font-size="19" fill="#43546a" font-weight="400" >/v1/messages           /v1/messages/count_tokens</text>
+<text x="180" y="1262" font-family="Menlo, Consolas, monospace" font-size="19" fill="#43546a" font-weight="400" >/v1/responses          /v1/responses/compact</text>
+<text x="85" y="1308" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#68798b" font-weight="400" >Allowlisted request + missing / wrong key: 401. All other method/path combinations: 404.</text>
+<rect x="1310" y="1082" width="830" height="251" rx="18" fill="#f1f4f8" stroke="#d5dfe8" stroke-width="1.5" />
+<text x="1336" y="1119" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" fill="#64768c" font-weight="700" letter-spacing="2">DEPLOYMENT CONDITIONS</text>
+<text x="1336" y="1159" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >Core + admin: no public domains or TCP proxies.</text>
+<text x="1336" y="1194" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >Gateway health: :8081/healthz must remain private.</text>
+<text x="1336" y="1229" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >Only the admin endpoint joins the tailnet; core does not.</text>
+<text x="1336" y="1264" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" fill="#43546a" font-weight="400" >Tailnet grants are additive; verify effective access policy.</text>
+<text x="60" y="1374" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" fill="#5f7085" font-weight="400" >Repository-defined setup · Live exposure, tailnet policy and persisted core settings are not verified by this diagram.</text>
+<text x="60" y="1406" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" fill="#7b8899" font-weight="400" >Source: .railway/railway.ts · gateway/Caddyfile · core/start.sh · docs/tailscale.md</text>
+</svg>
