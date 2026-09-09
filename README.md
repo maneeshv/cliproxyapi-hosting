@@ -6,11 +6,10 @@ This repository contains deployment configuration, operational scripts, and
 local security checks. Bring your own Railway project, tailnet, and provider
 accounts; it does not include a hosted endpoint or credentials.
 
-![Architecture: Railway HTTPS ingress reaches gateway port 8080; gateway forwards to core over private HTTP port 8317 with a separate upstream key. Administrators reach admin over Tailscale HTTPS, then core over private HTTP. Core and admin have separate persistent data volumes.](docs/images/architecture-infographic.png)
+![Architecture overview showing public API clients, the gateway, private CLIProxyAPI core and storage, and Tailscale admin access.](architecture.png)
 
-[Editable SVG](docs/images/architecture-infographic.svg). The diagram represents
-the repository-defined setup; live exposure and effective tailnet policy must
-be verified separately.
+Conceptual overview; the service table below specifies this repository's exact
+configuration.
 
 ## What gets deployed
 
