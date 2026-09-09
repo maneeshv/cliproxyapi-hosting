@@ -15,15 +15,25 @@ import urllib.request
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--base-url", default=os.getenv("ANTHROPIC_BASE_URL", "https://gateway-production-9f79.up.railway.app"))
-    parser.add_argument("--model", default=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5"))
+    parser.add_argument("--base-url", default=os.getenv("ANTHROPIC_BASE_URL"), help="HTTPS origin, e.g. https://gateway.example.com; or set ANTHROPIC_BASE_URL")
+    parser.add_argument("--model", default=os.getenv("ANTHROPIC_MODEL"), help="Model ID from your gateway; or set ANTHROPIC_MODEL")
     parser.add_argument("--key-file", type=Path, help="Read a key file instead of environment/prompt; never put the key in arguments")
     parser.add_argument("--timeout", type=float, default=90, help="Socket timeout in seconds")
     args = parser.parse_args()
+    if not args.base_url:
+        parser.error("Supply --base-url or set ANTHROPIC_BASE_URL")
+    try:
+        url = urllib.parse.urlsplit(args.base_url)
+        valid = (url.scheme == "https" and url.hostname and url.username is None and url.password is None
+                 and url.path in ("", "/") and not any(c.isspace() or ord(c) < 32 for c in args.base_url)
+                 and not any(c in args.base_url for c in "?#\\") and url.port != 0)
+    except ValueError:
+        valid = False
+    if not valid:
+        parser.error("Use the HTTPS origin only, e.g. https://gateway.example.com (no /v1)")
+    if not args.model or not args.model.strip():
+        parser.error("Supply --model or set ANTHROPIC_MODEL")
     base = args.base_url.rstrip("/")
-    url = urllib.parse.urlsplit(base)
-    if url.scheme != "https" or not url.hostname or url.username or url.password or url.query or url.fragment or url.path:
-        parser.error("Use the HTTPS origin only, e.g. https://gateway-production-9f79.up.railway.app (no /v1)")
     key = (args.key_file.read_text() if args.key_file else os.getenv("PROXY_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN") or os.getenv("ANTHROPIC_API_KEY") or getpass.getpass("Proxy API key (hidden): ")).strip()
     if not key or any(c.isspace() for c in key):
         parser.error("The API key must be nonempty and contain no whitespace")

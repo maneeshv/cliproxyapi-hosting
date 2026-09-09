@@ -6,12 +6,15 @@ from pathlib import Path
 import shlex
 import subprocess
 
+from railway_target import bound_target, target_flags
+
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--source", type=Path, default=Path.home() / ".cli-proxy-api")
 parser.add_argument("--providers", nargs="+", default=["claude", "codex", "xai"])
 parser.add_argument("--identity", type=Path, default=Path.home() / ".ssh/cliproxyapi_railway")
 args = parser.parse_args()
+target_context = bound_target()
 counts = {}
 for path in sorted(args.source.glob("*.json")):
     payload = path.read_bytes()
@@ -24,7 +27,7 @@ for path in sorted(args.source.glob("*.json")):
     staging = shlex.quote("/data/auths/" + path.name + ".pending")
     command = f"set -eu; umask 077; test ! -e {target} || exit 17; base64 -d > {staging}; chmod 600 {staging}; mv {staging} {target}"
     result = subprocess.run(
-        ["railway", "ssh", "--service", "core", "--identity-file", str(args.identity), "--", "sh", "-c", command],
+        ["railway", "ssh", *target_flags(target_context), "--service", "core", "--identity-file", str(args.identity), "--", "sh", "-c", command],
         input=base64.b64encode(payload), stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=ROOT,
     )
     if result.returncode == 17:
