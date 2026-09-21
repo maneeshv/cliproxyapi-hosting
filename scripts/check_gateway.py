@@ -2,6 +2,8 @@
 """Exercise the real Caddy boundary: python3 scripts/check_gateway.py --caddy PATH."""
 
 import argparse
+import base64
+import hashlib
 import http.client
 import http.server
 import json
@@ -59,6 +61,18 @@ def main():
             self.rfile.read(int(self.headers.get("Content-Length", 0)))
             record = {"method": self.command, "path": self.path, "headers": dict(self.headers)}
             requests.append(record)
+            if self.headers.get("Upgrade", "").lower() == "websocket":
+                accept = base64.b64encode(hashlib.sha1(
+                    (self.headers["Sec-WebSocket-Key"] + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode()
+                ).digest()).decode()
+                self.send_response(101)
+                self.send_header("Connection", "Upgrade")
+                self.send_header("Upgrade", "websocket")
+                self.send_header("Sec-WebSocket-Accept", accept)
+                self.end_headers()
+                self.wfile.write(b"\x81\x02ok")
+                self.wfile.flush()
+                return
             body = json.dumps(record).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
@@ -120,6 +134,8 @@ def main():
                 ("POST", "/v1/chat/completions"), ("POST", "/v1/completions"),
                 ("POST", "/v1/messages"), ("POST", "/v1/messages/count_tokens"),
                 ("POST", "/v1/responses"), ("POST", "/v1/responses/compact"),
+                ("POST", "/v1/live"), ("GET", "/v1/live/rtc_test-123"),
+                ("GET", "/v1/realtime?model=gpt-realtime"),
             ]
             for method, path in allowed:
                 for headers in ({"Authorization": "Bearer " + PUBLIC_KEY}, {"X-Api-Key": PUBLIC_KEY}):
@@ -144,7 +160,9 @@ def main():
                     "/", "/healthz", "/management.html", "/v0/management/config",
                     "/v0/management/auth-files/download?name=example.json",
                     "/v0/management/oauth-callback", "/anthropic/callback", "/codex/callback",
-                    "/antigravity/callback", "/debug/pprof/", "/v1/ws", "/v1/realtime",
+                    "/antigravity/callback", "/debug/pprof/", "/v1/ws", "/v1/realtime/calls",
+                    "/v1/live", "/v1/live/", "/v1/live/rtc_test/extra", "/v1/live/..",
+                    "/v1/live/rtc_test%2fextra", "/v1/live/rtc_test/../../v0/management/config",
                     "/v1/models/", "/v1/models/../management.html", "/v1/%2e%2e/management.html",
                     "/v1/%2e%2e%2fmanagement.html", "/v1/models%2f..%2f..%2fmanagement.html",
                     "/v1/models/../../v0/management/config", "/v1/models;management.html",
@@ -154,6 +172,9 @@ def main():
                 ("POST", "/v1/models"), ("GET", "/v1/chat/completions"),
                 ("PUT", "/v1/responses"), ("DELETE", "/v1/messages"),
                 ("HEAD", "/v1/models"), ("OPTIONS", "/v1/models"),
+                ("POST", "/v1/realtime"), ("POST", "/v1/realtime/calls"),
+                ("POST", "/v1/realtime/client_secrets"), ("DELETE", "/v1/live/rtc_test"),
+                ("POST", "/v1/live/rtc_test"), ("PUT", "/v1/live"),
             ]
             for method, path in blocked:
                 before = len(requests)
@@ -161,6 +182,26 @@ def main():
                 assert status == 404, (method, path, status)
                 assert len(requests) == before, ("blocked request reached backend", path)
                 checks += 1
+            for path in ("/v1/responses", "/v1/live/rtc_test-123", "/v1/realtime?call_id=rtc_test-123"):
+                upgrade = {"Connection": "Upgrade", "Upgrade": "websocket",
+                           "Sec-WebSocket-Version": "13", "Sec-WebSocket-Key": "dGhlIHNhbXBsZSBub25jZQ=="}
+                for credential in (None, "invalid", PUBLIC_KEY):
+                    headers = upgrade | ({"Authorization": "Bearer " + credential} if credential else {})
+                    before = len(requests)
+                    connection = http.client.HTTPConnection("127.0.0.1", public_port, timeout=3)
+                    try:
+                        connection.request("GET", path, headers=headers)
+                        response = connection.getresponse()
+                        if credential == PUBLIC_KEY:
+                            assert response.status == 101, (path, response.status)
+                            assert response.getheader("Sec-WebSocket-Accept") == "s3pPLMBiTxaQ9kYGzzhZRbK+xOo="
+                            assert response.fp.read(4) == b"\x81\x02ok"
+                            assert requests[-1]["headers"]["Authorization"] == "Bearer " + UPSTREAM_KEY
+                        else:
+                            assert response.status == 401 and len(requests) == before
+                        checks += 1
+                    finally:
+                        connection.close()
             for path in ("/v1/models?key=" + PUBLIC_KEY, "/v1/models?auth_token=" + PUBLIC_KEY):
                 before = len(requests)
                 assert request("GET", path)[0] == 401

@@ -191,8 +191,10 @@ and verify public/private access plus real inference.
 ## Limitations
 
 - Shared-key access has no per-user accounting, quotas, or rate limiter.
-- Only the explicitly listed OpenAI/Anthropic text routes are exposed;
-  Gemini-native, media, and arbitrary `/v1/*` routes are denied.
+- Only the explicitly listed OpenAI/Anthropic text routes and Codex voice routes
+  (`POST /v1/live`, `GET /v1/live/:call_id`, `GET /v1/realtime`) are exposed.
+  Voice uses the same client-key authentication; other realtime, Gemini-native,
+  media, and arbitrary `/v1/*` routes are denied. Media relay remains disabled.
 - Request bodies are limited to 32 MiB. Allowed routes support streaming and
   Caddy WebSocket forwarding; the local check does not prove provider streaming.
 - Browser CORS requires an explicit origin policy. Railway's browser challenge
