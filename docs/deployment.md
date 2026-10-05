@@ -96,4 +96,4 @@ history; deleting their text alone does not revoke them.
 - [Railway CLI](https://docs.railway.com/guides/cli)
 - [Railway IaC reference](https://docs.railway.com/infrastructure-as-code/reference)
 - [Railway private networking](https://docs.railway.com/networking/private-networking)
-- [CLIProxyAPI pinned release](https://github.com/router-for-me/CLIProxyAPI/releases/tag/v7.2.152)
+- [CLIProxyAPI pinned release](https://github.com/router-for-me/CLIProxyAPI/releases/tag/v8.0.15)

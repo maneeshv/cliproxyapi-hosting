@@ -16,7 +16,7 @@ configuration.
 | Service | Purpose | Exposure / persistence |
 | --- | --- | --- |
 | `gateway` | Caddy 2.11.4; enforces a separate client API key | Public HTTPS to port 8080; health port 8081 stays private |
-| `core` | CLIProxyAPI 7.2.152 and dashboard 1.22.14 | Private port 8317; `/data` volume, 1 GiB |
+| `core` | CLIProxyAPI 8.0.15 and dashboard 1.25.3 | Private port 8317; `/data` volume, 1 GiB |
 | `admin` | Tailscale Forwarder; private HTTPS management | Tailnet port 8317; `/data` identity volume, 512 MiB |
 
 The gateway forwards only the inference methods and paths in
